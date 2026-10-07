@@ -70,22 +70,33 @@ export const AboutAndProfileSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {PORTFOLIO_DATA.professionalProfile.pillars.map((pillar) => (
-              <div
-                key={pillar.index}
-                className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-2.5"
-              >
-                <span className="font-mono-tabular text-xs font-semibold text-blue-600 dark:text-blue-400">
-                  {pillar.index}.
-                </span>
-                <h4 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
-                  {pillar.title}
-                </h4>
-                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  {pillar.description}
-                </p>
-              </div>
-            ))}
+            {PORTFOLIO_DATA.professionalProfile.pillars.map((pillar, idx) => {
+              const accents = [
+                'from-blue-600 to-cyan-500',
+                'from-indigo-600 to-purple-500',
+                'from-emerald-500 to-teal-500',
+                'from-amber-500 to-orange-500',
+              ];
+              return (
+                <div
+                  key={pillar.index}
+                  className="relative overflow-hidden bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-2.5 shadow-sm hover:border-blue-500/50 transition-colors"
+                >
+                  <div
+                    className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${accents[idx % accents.length]}`}
+                  />
+                  <span className="font-mono-tabular text-xs font-bold text-blue-600 dark:text-blue-400">
+                    {pillar.index}.
+                  </span>
+                  <h4 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
+                    {pillar.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    {pillar.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -222,31 +233,43 @@ export const SkillsSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PORTFOLIO_DATA.skills.map((group, index) => (
-            <div
-              key={group.category}
-              className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 flex flex-col justify-between"
-            >
-              <div>
-                <span className="font-mono-tabular text-xs text-zinc-400 dark:text-zinc-500">
-                  0{index + 1}
-                </span>
-                <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100 mt-1 mb-4">
-                  {group.category}
-                </h3>
-                <ul className="space-y-2.5 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
-                  {group.items.map((skill) => (
-                    <li
-                      key={skill}
-                      className="text-sm font-medium text-zinc-700 dark:text-zinc-300 flex items-center justify-between"
-                    >
-                      <span>{skill}</span>
-                    </li>
-                  ))}
-                </ul>
+          {PORTFOLIO_DATA.skills.map((group, index) => {
+            const skillAccents = [
+              'from-blue-600 to-indigo-500',
+              'from-emerald-500 to-teal-500',
+              'from-purple-600 to-pink-500',
+              'from-amber-500 to-rose-500',
+              'from-cyan-500 to-blue-600',
+            ];
+            return (
+              <div
+                key={group.category}
+                className="relative overflow-hidden bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 flex flex-col justify-between shadow-xs hover:border-blue-500/50 transition-colors"
+              >
+                <div
+                  className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${skillAccents[index % skillAccents.length]}`}
+                />
+                <div>
+                  <span className="font-mono-tabular text-xs font-semibold text-blue-600 dark:text-blue-400">
+                    0{index + 1}
+                  </span>
+                  <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100 mt-1 mb-4">
+                    {group.category}
+                  </h3>
+                  <ul className="space-y-2.5 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
+                    {group.items.map((skill) => (
+                      <li
+                        key={skill}
+                        className="text-sm font-medium text-zinc-700 dark:text-zinc-300 flex items-center justify-between"
+                      >
+                        <span>{skill}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

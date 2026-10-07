@@ -57,7 +57,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           <div
             role="tablist"
             aria-label="Filter projects by category"
-            className="flex flex-wrap items-center gap-1 p-1 bg-zinc-200/70 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl self-start"
+            className="flex flex-wrap items-center gap-1 p-1.5 bg-white/80 dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 rounded-xl self-start shadow-xs"
           >
             {FILTER_CATEGORIES.map((category) => {
               const isActive = activeFilter === category;
@@ -68,10 +68,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveFilter(category)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
                     isActive
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
                   }`}
                 >
                   {category}
@@ -96,7 +96,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveFilter('All')}
-                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all cursor-pointer"
               >
                 Show All Projects
               </button>
@@ -112,143 +112,160 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <article
-                key={project.id}
-                className="group bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden flex flex-col justify-between transition-colors hover:border-zinc-400 dark:hover:border-zinc-600"
-              >
-                <div>
-                  {/* Project Image with Zero-Broken-Image Fallback */}
-                  <div
-                    onClick={() => onSelectProject(project)}
-                    className="relative aspect-4/3 w-full bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200/70 dark:border-zinc-800/70 overflow-hidden cursor-pointer"
-                  >
-                    {!imageErrors[project.id] ? (
-                      <img
-                        src={project.image}
-                        alt={project.imageAlt}
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                        onError={() => handleImageError(project.id)}
-                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-100 dark:bg-zinc-900">
-                        <span className="font-display text-lg font-bold text-zinc-800 dark:text-zinc-200">
-                          {project.name}
-                        </span>
-                        <span className="text-xs text-zinc-500 mt-1">
+            {filteredProjects.map((project, idx) => {
+              const topBarGradients = [
+                'from-blue-600 via-indigo-500 to-cyan-500',
+                'from-indigo-600 via-purple-500 to-pink-500',
+                'from-emerald-500 via-teal-500 to-blue-600',
+              ];
+              const barGradient = topBarGradients[idx % topBarGradients.length];
+
+              return (
+                <article
+                  key={project.id}
+                  className="group relative bg-white dark:bg-[#121215] border border-zinc-200/90 dark:border-zinc-800 rounded-2xl overflow-hidden flex flex-col justify-between transition-all hover:border-blue-500/60 dark:hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-950/5"
+                >
+                  <div className={`h-1.5 w-full bg-gradient-to-r ${barGradient}`} />
+                  <div>
+                    {/* Project Image with Zero-Broken-Image Fallback */}
+                    <div
+                      onClick={() => onSelectProject(project)}
+                      className="relative aspect-4/3 w-full bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200/70 dark:border-zinc-800/70 overflow-hidden cursor-pointer"
+                    >
+                      {!imageErrors[project.id] ? (
+                        <img
+                          src={project.image}
+                          alt={project.imageAlt}
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onError={() => handleImageError(project.id)}
+                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-200"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-100 dark:bg-zinc-900">
+                          <span className="font-display text-lg font-bold text-zinc-800 dark:text-zinc-200">
+                            {project.name}
+                          </span>
+                          <span className="text-xs text-zinc-500 mt-1">
+                            {project.displayCategoryLabel}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Body: Leads directly with quiet 1-line text kicker and title (No Badge Sandwich) */}
+                    <div className="p-6">
+                      <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-2">
+                        <span className="font-medium text-blue-600 dark:text-blue-400">
                           {project.displayCategoryLabel}
                         </span>
+                        <span aria-hidden="true">·</span>
+                        <span
+                          className={
+                            project.status === 'Live'
+                              ? 'text-emerald-700 dark:text-emerald-400 font-semibold'
+                              : 'text-amber-700 dark:text-amber-400 font-semibold'
+                          }
+                        >
+                          Status: {project.status}
+                        </span>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Card Body: Leads directly with quiet 1-line text kicker and title (No Badge Sandwich) */}
-                  <div className="p-6">
-                    <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-2">
-                      <span>{project.displayCategoryLabel}</span>
-                      <span aria-hidden="true">·</span>
-                      <span
-                        className={
-                          project.status === 'Live'
-                            ? 'text-emerald-700 dark:text-emerald-400 font-medium'
-                            : 'text-amber-700 dark:text-amber-400 font-medium'
-                        }
-                      >
-                        Status: {project.status}
-                      </span>
-                    </div>
+                      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                        <button
+                          type="button"
+                          onClick={() => onSelectProject(project)}
+                          className="text-left hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                          {project.name}
+                        </button>
+                      </h3>
 
-                    <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      <button
-                        type="button"
-                        onClick={() => onSelectProject(project)}
-                        className="text-left hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                      >
-                        {project.name}
-                      </button>
-                    </h3>
-
-                    <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
-                      {project.tagline}
-                    </p>
-
-                    <p className="text-sm text-zinc-600 dark:text-zinc-300 mt-3 leading-relaxed">
-                      {project.shortDescription}
-                    </p>
-
-                    {project.disclaimer && (
-                      <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400 italic">
-                        Note: {project.disclaimer}
+                      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        {project.tagline}
                       </p>
-                    )}
 
-                    {/* Technologies as clean unboxed text with middot separators */}
-                    <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
-                      <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mb-1">
-                        Technologies
+                      <p className="text-sm text-zinc-600 dark:text-zinc-300 mt-3 leading-relaxed">
+                        {project.shortDescription}
                       </p>
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400">
-                        {project.technologies.map((tech, index) => (
-                          <React.Fragment key={tech}>
-                            <span>{tech}</span>
-                            {index < project.technologies.length - 1 && (
-                              <span aria-hidden="true">·</span>
-                            )}
-                          </React.Fragment>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Card Actions Footer */}
-                <div className="px-6 pb-6 pt-2 flex flex-wrap items-center gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => onSelectProject(project)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg transition-colors whitespace-nowrap cursor-pointer"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Project Details</span>
-                  </button>
-
-                  {project.liveDemoUrl && (
-                    <a
-                      href={project.liveDemoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap"
-                    >
-                      {project.isGame ? (
-                        <>
-                          <Play className="w-3.5 h-3.5 fill-current" />
-                          <span>Play Game</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Live Demo</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" />
-                        </>
+                      {project.disclaimer && (
+                        <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400 italic">
+                          Note: {project.disclaimer}
+                        </p>
                       )}
-                    </a>
-                  )}
 
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline-offset-4 hover:underline transition-colors whitespace-nowrap ml-auto"
+                      {/* Technologies as clean unboxed text with middot separators */}
+                      <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800/80">
+                        <p className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 mb-1">
+                          Technologies
+                        </p>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                          {project.technologies.map((tech, index) => (
+                            <React.Fragment key={tech}>
+                              <span>{tech}</span>
+                              {index < project.technologies.length - 1 && (
+                                <span
+                                  aria-hidden="true"
+                                  className="text-blue-500 dark:text-blue-400"
+                                >
+                                  ·
+                                </span>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Actions Footer */}
+                  <div className="px-6 pb-6 pt-2 flex flex-wrap items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => onSelectProject(project)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg transition-colors whitespace-nowrap cursor-pointer"
                     >
-                      <span>GitHub</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </article>
-            ))}
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Project Details</span>
+                    </button>
+
+                    {project.liveDemoUrl && (
+                      <a
+                        href={project.liveDemoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xs rounded-lg transition-all whitespace-nowrap"
+                      >
+                        {project.isGame ? (
+                          <>
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <span>Play Game</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Live Demo</span>
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </>
+                        )}
+                      </a>
+                    )}
+
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 underline-offset-4 hover:underline transition-colors whitespace-nowrap ml-auto"
+                      >
+                        <span>GitHub</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>

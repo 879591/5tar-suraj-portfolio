@@ -24,6 +24,20 @@
   }
 }
 
+.premium-hero-mesh {
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(37, 99, 235, 0.12) 0px, transparent 48%),
+    radial-gradient(at 85% 20%, rgba(124, 58, 237, 0.10) 0px, transparent 45%),
+    radial-gradient(at 50% 85%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+}
+
+.dark .premium-hero-mesh {
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
+    radial-gradient(at 85% 20%, rgba(139, 92, 246, 0.15) 0px, transparent 48%),
+    radial-gradient(at 50% 85%, rgba(16, 185, 129, 0.10) 0px, transparent 50%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
